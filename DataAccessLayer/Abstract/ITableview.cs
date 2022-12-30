@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Abstract
 {
-    public interface IValues:IRepository<Values>
+    public interface ITableview:IRepository<ITableview>
     {
-        //Task<List<Values>> TableView();
+        Task<List<TableView>> Tableview();
+
+
     }
 }

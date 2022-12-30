@@ -28,16 +28,21 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @for (int i = 0; i <tableview.Count ; i++)
+
+                        {
+                            int index = i;
                     <tr>
                         <td><button class="btn btn-dark btn-outline-info m-1 p-1">Update</button><button class="btn btn-dark btn-outline-info m-1 p-1">Delete</button></td>
-                        @foreach (var item in values)
-                        {
 
-                            <td>@item.Value1</td>
-                        }
+                        <td>@tableview[i]._values.Value1</td>
+
+
+
 
                     </tr>
-                </tbody>
+                    }
+                    </tbody>
             </table>
         </div>
     </div>
@@ -97,176 +102,192 @@
 
         <h4>Form View</h4>
 
-
         <div class="container m-1 p-1">
-            <EditForm Model="@val" OnInvalidSubmit="AddRecord">
-                <div class="form-group">
-                    @foreach (var item in columns)
-                    {
-                        <label for="@item.Id" class="col-form-label ">@item.Name</label>
-                        <InputText class="m-1 p-1" type="text" id="@item.Id" @bind-Value="@val.Value1" />
+            @for (int i = 0; i < columns.Count; i++)
+            {
+                int index = i;
+                <EditForm Model="@val" OnValidSubmit="@HandleValidSubmit">
+
+                   
+                    <div class="form-group">
+
+                        <label for="" class="col-form-label ">@columns[index].Name</label>
+                        <InputText class="m-1 p-1" @onclick="()=>GetId(columns[index].Id)" type="text" @bind-Value="val.Value1" />
+                        <InputNumber hidden id="Id" type="number" @bind-Value="@val.ColumnId" />
+
+                        <InputNumber id="record" hidden type="number" @bind-Value="@val.RecordId" />
+                        <button class="btn btn-danger" value="Save" type="submit">Save</button>
+                    </div>
+
+                    
+                   
+                </EditForm>
+            }
+            </div>
+    </div>
+        </div>
 
 
-                        <InputNumber hidden id="Id" type="number" placeholder="@item.Id" @bind-Value="@val.ColumnId" />
-                        <InputNumber hidden id="record" type="number" placeholder="1" @bind-Value="@val.RecordId" />
+        <div class="row">
+            <div class="col-md-12 m-3 p-2">
 
-                    }
+                <h4>System Logs</h4>
 
-                    <input class="btn btn-danger" value="Save" type="submit" />
+
+                <div class="container m-1 p-1">
+                    <ul class="list-group">
+                        @foreach (var item in Logs)
+                        {
+                            <li>@item</li>
+                        }
+
+
+
+                    </ul>
+
                 </div>
-            </EditForm>
-
+            </div>
         </div>
-    </div>
-</div>
+
+        @code {
 
 
-<div class="row">
-    <div class="col-md-12 m-3 p-2">
+            private bool isChecked = false;
+            private string columnName;
+            private string entity;
+            private int id;
+            private string _value { get; set; }
 
-        <h4>System Logs</h4>
+            public Values val = new Values();
 
+            CoreDbContext ctx = new CoreDbContext();
+            List<Column> columns = new List<Column>();
+            List<Values> values = new List<Values>();
+            List<Column> allColumns = new List<Column>();
+            List<string> Logs = new List<string>();
+            List<TableView> tableview = new List<TableView>();
+            List<Column> coltableview = new List<Column>();
 
-        <div class="container m-1 p-1">
-            <ul class="list-group">
-                 @foreach (var item in Logs)
-                 {
-                <li>@item</li>
-                 }
-
-
-
-            </ul>
-
-        </div>
-    </div>
-</div>
-
-@code {
+            protected void GetId(int value)
+            {
+                id = value;
+            }
 
 
-    private bool isChecked = false;
-    private string columnName;
-    private string entity;
-    private int id;
-    private string _value { get; set; }
-
-    public Values val = new();
+            protected override async Task OnInitializedAsync()
+            {
 
 
-    List<Column> columns = new List<Column>();
-    List<Values> values = new List<Values>();
-    List<Column> allColumns = new List<Column>();
-    List<string> Logs = new List<string>();
+                //columns = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetVisibleColumns");
+                //values = await Http.GetFromJsonAsync<List<Values>>("/api/Value/TableView");
+               // coltableview = await Http.GetFromJsonAsync<List<Column>>("/api/Column/TableView");
+                allColumns = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetAllColumns");
+                Logs = await Http.GetFromJsonAsync<List<string>>("api/SystemLog/GetAllLogs");
+                tableview = await Http.GetFromJsonAsync<List<TableView>>("api/Columns/TableView");
 
 
-    protected void GetId(int value)
-    {
-        id = value;
-    }
+            }
 
+            private async void HandleValidSubmit()
+            {
 
-    protected override async Task OnInitializedAsync()
-    {
-
-
-        columns = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetVisibleColumns");
-        values = await Http.GetFromJsonAsync<List<Values>>("/api/Value/TableView");
-        allColumns = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetAllColumns");
-        Logs = await Http.GetFromJsonAsync<List<string>>("api/SystemLog/GetAllLogs");
-
-
-    }
-
-    private async Task AddNewColumn()
-    {
-        int? order = 0;
-        var setOrderNumber = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetAllColumns");
-        if (setOrderNumber.Count < 1)
-        {
-            order = 1;
-        }
-        else if (setOrderNumber.Count > 0)
-        {
-            var query = setOrderNumber.OrderByDescending(x => x.Order).FirstOrDefault();
-            order = query.Order + 1;
-        }
-        Column column = new Column { Name = columnName, IsVisible = true, Order = order };
-        var response = await Http.PostAsJsonAsync<Column>("/api/Column/AddColumn", column);
-        response.StatusCode.ToString();
-
-        await OnInitializedAsync();
-
-    }
+                Values valuess = new Values {Value1=val.Value1,ColumnId=id };
+                var response = await Http.PostAsJsonAsync<Values>("/api/Value/AddValue",valuess);
+                response.StatusCode.ToString();
+                await OnInitializedAsync();
+                // ctx.Update(values);
 
 
 
-    private async Task DeleteColumn(int Id)
-    {
-        var response = await Http.DeleteAsync("/api/Column/Delete/" + Id);
-        response.StatusCode.ToString();
+            }
 
-        await OnInitializedAsync();
-    }
+            private async Task AddNewColumn()
+            {
+                int? order = 0;
+                var setOrderNumber = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetAllColumns");
+                if (setOrderNumber.Count < 1)
+                {
+                    order = 1;
+                }
+                else if (setOrderNumber.Count > 0)
+                {
+                    var query = setOrderNumber.OrderByDescending(x => x.Order).FirstOrDefault();
+                    order = query.Order + 1;
+                }
+                Column column = new Column { Name = columnName, IsVisible = true, Order = order };
+                var response = await Http.PostAsJsonAsync<Column>("/api/Column/AddColumn", column);
+                response.StatusCode.ToString();
 
-    private async Task UpdateColumn(KeyboardEventArgs e)
-    {
-        if (e.Code == "Enter")
-        {
-            var oldRecord = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetAll");
-            var list = oldRecord.FirstOrDefault(x => x.Id == id);
+                await OnInitializedAsync();
 
-            Column col = new Column { Name = _value, IsVisible = list.IsVisible, Order = list.Order };
-            var response = await Http.PutAsJsonAsync($"/api/Column/UpdateColumns/{id}", col);
-            await OnInitializedAsync();
-        }
-
-
-    }
-    private async Task Hide(ChangeEventArgs e)
-    {
-        isChecked = Convert.ToBoolean(e.Value);
-        var get = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetAll");
-        var oldRecord = get.FirstOrDefault(x => x.Id == id);
-
-        Column column = new Column { IsVisible = isChecked, Order = oldRecord.Order, Name = oldRecord.Name };
-
-        var result = await Http.PutAsJsonAsync<Column>($"/api/Column/UpdateRecord/{id}", column);
-        var repsonse = result.StatusCode.ToString();
-        await OnInitializedAsync();
-    }
+            }
 
 
-    private async Task ChangeColumnOrder(int? order, int id)
-    {
-        var list = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetAllColumns");
-        var col1 = list.FirstOrDefault(x => x.Id == id);
-        var col2 = list.FirstOrDefault(x => x.Order == order);
 
-        Column column1 = new Column { Name = col1.Name, Order = col2.Order, IsVisible = col1.IsVisible };
-        Column column2 = new Column { Name = col2.Name, Order = col1.Order, IsVisible = col2.IsVisible };
+            private async Task DeleteColumn(int Id)
+            {
+                var response = await Http.DeleteAsync("/api/Column/Delete/" + Id);
+                response.StatusCode.ToString();
 
+                await OnInitializedAsync();
+            }
 
-        var response2 = await Http.PutAsJsonAsync($"/api/Column/UpdateColumns/{col1.Id}", column1);
+            private async Task UpdateColumn(KeyboardEventArgs e)
+            {
+                if (e.Code == "Enter")
+                {
+                    var oldRecord = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetAll");
+                    var list = oldRecord.FirstOrDefault(x => x.Id == id);
 
-        var response = await Http.PutAsJsonAsync($"/api/Column/UpdateColumns/{col2.Id}", column2);
-        response.StatusCode.ToString();
-        response2.StatusCode.ToString();
-
-        await OnInitializedAsync();
-    }
-    private async Task AddRecord()
-    {
-
-
-        var response = await Http.PostAsJsonAsync<Values>("/api/Column/AddValue", val);
-        await OnInitializedAsync();
+                    Column col = new Column { Name = _value, IsVisible = list.IsVisible, Order = list.Order };
+                    var response = await Http.PutAsJsonAsync($"/api/Column/UpdateColumns/{id}", col);
+                    await OnInitializedAsync();
+                }
 
 
-    }
+            }
+            private async Task Hide(ChangeEventArgs e)
+            {
+                isChecked = Convert.ToBoolean(e.Value);
+                var get = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetAll");
+                var oldRecord = get.FirstOrDefault(x => x.Id == id);
+
+                Column column = new Column { IsVisible = isChecked, Order = oldRecord.Order, Name = oldRecord.Name };
+
+                var result = await Http.PutAsJsonAsync<Column>($"/api/Column/UpdateRecord/{id}", column);
+                var repsonse = result.StatusCode.ToString();
+                await OnInitializedAsync();
+            }
+
+
+            private async Task ChangeColumnOrder(int? order, int id)
+            {
+                var list = await Http.GetFromJsonAsync<List<Column>>("/api/Column/GetAllColumns");
+                var col1 = list.FirstOrDefault(x => x.Id == id);
+                var col2 = list.FirstOrDefault(x => x.Order == order);
+
+                Column column1 = new Column { Name = col1.Name, Order = col2.Order, IsVisible = col1.IsVisible };
+                Column column2 = new Column { Name = col2.Name, Order = col1.Order, IsVisible = col2.IsVisible };
+
+
+                var response2 = await Http.PutAsJsonAsync($"/api/Column/UpdateColumns/{col1.Id}", column1);
+
+                var response = await Http.PutAsJsonAsync($"/api/Column/UpdateColumns/{col2.Id}", column2);
+                response.StatusCode.ToString();
+                response2.StatusCode.ToString();
+
+                await OnInitializedAsync();
+            }
+            private async Task AddRecord()
+            {
+                var response = await Http.PostAsJsonAsync<Values>("/api/Column/AddValue", val);
+                await OnInitializedAsync();
+
+
+            }
 
 
 
 
 
-}
+        } 

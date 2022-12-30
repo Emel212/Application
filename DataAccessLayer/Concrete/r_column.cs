@@ -80,5 +80,11 @@ namespace DataAccessLayer.Concrete
         {
             throw new NotImplementedException();
         }
+        public async Task<List<Column>> TableView()
+        {
+            var query2 = from col in _ctx.Columns join val in _ctx.Values on col.Id equals val.ColumnId where col.IsVisible == true orderby col.Order ascending select col;
+            return await query2.ToListAsync();
+
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace Application.Server
             services.AddSingleton<IValues, r_values>();
             services.AddSingleton<IRepository<SystemLogs>, Repository<SystemLogs>>();
             services.AddSingleton<IsystemLogs, r_systemLogs>();
-
+            services.AddSingleton<ITableview, tableview>();
             services.AddSingleton<IRecord, r_records>();
             services.AddDbContext<CoreDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
         }

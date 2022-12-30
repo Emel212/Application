@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Server", "Appli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Client", "Application\Client\Application.Client.csproj", "{1E8DA71C-52D7-4E6F-B07B-54A6D04ECEF3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Shared", "Application\Shared\Application.Shared.csproj", "{D7822190-3C70-4E46-A9B9-50106A07ADB5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{7ABDEDBD-5018-4845-B199-6DCA2D9986F1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{AF1BF7A9-DC4F-4F76-BDC4-E5156C8EDBA2}"
@@ -27,10 +25,6 @@ Global
 		{1E8DA71C-52D7-4E6F-B07B-54A6D04ECEF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E8DA71C-52D7-4E6F-B07B-54A6D04ECEF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E8DA71C-52D7-4E6F-B07B-54A6D04ECEF3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7822190-3C70-4E46-A9B9-50106A07ADB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7822190-3C70-4E46-A9B9-50106A07ADB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7822190-3C70-4E46-A9B9-50106A07ADB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7822190-3C70-4E46-A9B9-50106A07ADB5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7ABDEDBD-5018-4845-B199-6DCA2D9986F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7ABDEDBD-5018-4845-B199-6DCA2D9986F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ABDEDBD-5018-4845-B199-6DCA2D9986F1}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -14,7 +14,8 @@ namespace DataAccessLayer.Abstract
         Task<bool> ChangeColumnOrder(string direction,int id);
         Task<List<Column>> GetAllColumns();
         Task<bool> UpdateColumns(int id, Column entity);
+        Task<List<Column>> TableView();
 
 
-     }
+    }
 }

@@ -31,15 +31,10 @@ namespace API.Controllers
             var result = await _repository.GetById(id);
             return Ok(result);
         }
-        [HttpGet]
-        public async Task<IActionResult> TableView()
-        {
-            var result = await _value.TableView();
-            return Ok(result);
-        }
+      
 
         [HttpPost]
-        public async Task<IActionResult> AddValue([FromQuery]Values value)
+        public async Task<IActionResult> AddValue(Values value)
         {
             var result = await _repository.Insert(value);
             return Ok(result);

@@ -28,8 +28,8 @@ namespace Application.Server.Controllers
         [HttpGet]
         public IActionResult GetAllLogs()
         {
-            SqlConnection con = new SqlConnection("Data Source=DESKTOP-MR18V5O\\SQLEXPRESS;initial catalog=DBbtyon;integrated security=true;");
-            SqlDataAdapter adp = new SqlDataAdapter("Select Description from SystemLogs", con);
+            SqlConnection con = new SqlConnection("Data Source=DESKTOP-2GVBSVF\\SQLEXPRESS;initial catalog=BtyonDB;integrated security=true;");
+            SqlDataAdapter adp = new SqlDataAdapter("Select Top 10(Description) from SystemLogs order by Id desc", con);
             adp.SelectCommand.CommandType = CommandType.Text;
             DataTable dt = new DataTable();
             con.Open();

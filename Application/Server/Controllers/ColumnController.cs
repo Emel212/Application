@@ -17,13 +17,18 @@ namespace API.Controllers
         protected IRepository<Column> _repository;
         protected IColumns _columns;
         protected CoreDbContext _ctx;
+        protected ITableview _tableView;
+        protected IValues _values;
+      
 
-        public ColumnController(IRepository<Column> repository, IColumns columns)
+        public ColumnController(IRepository<Column> repository, IColumns columns,ITableview tableview,IValues values)
         {
 
             _columns = columns;
             _repository = repository;
+            _tableView = tableview;
             _ctx = new CoreDbContext();
+            _values = values;
         }
         [HttpGet]
         public async Task<List<Column>> GetAllColumns()
@@ -86,7 +91,18 @@ namespace API.Controllers
             /*var result = await _repository.Update(column);
             return Ok(result);*/
         }
-      
-        
+        [HttpGet]
+        public async Task<IActionResult> TableView()
+        {
+            //var result = await _columns.TableView();
+
+           var result= await _tableView.Tableview();
+
+            return Ok(result);
+        }
+       
+
+
+
     }
 }

@@ -39,15 +39,38 @@ namespace DataAccessLayer.Concrete
             return _repository.Insert(entity);
         }
 
-        public async Task<List<Values>> TableView()
+        public async Task<List<TableView>> TableView()
         {
-            var query2 = from col in _ctx.Columns join val in _ctx.Values on col.Id equals val.ColumnId where col.IsVisible == true orderby col.Order ascending select val;
-            return await query2.ToListAsync();
+            List<Column> p =_ctx.Columns.ToList();
+            List<Values> i = _ctx.Values.ToList();
+            var query = from column in p
+                        join value in i on column.Id equals value.ColumnId into Table1
+                        from value in Table1.Where(x => x.Column.IsVisible == true).ToList()
+                        select new TableView
+                        {
+                            _column = column,
+                            _values = value
+                        };
+            return   query.ToList();
+
+
+
+
+
+
+
+
+
+            /*var query2 = from col in _ctx.Columns join val in _ctx.Values on col.Id equals val.ColumnId where col.IsVisible == true orderby col.Order ascending select val;
+            return await query2.ToListAsync();*/
+
         }
 
         public Task<bool> Update(Values entity)
         {
             return _repository.Update(entity);
         }
+
+     
     }
 }
