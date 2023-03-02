@@ -14,15 +14,15 @@ namespace Application.Server.Controllers
     [Route("api/[controller]/[action]")]
     public class SystemLogController : ControllerBase
     {
-            protected IRepository<SystemLogs> _repository;
+            protected IRepository<SystemLog> _repository;
         protected IsystemLogs _syslog;
             protected CoreDbContext _ctx;
 
-            public SystemLogController(IRepository<SystemLogs> repository,IsystemLogs syslog)
+            public SystemLogController(IRepository<SystemLog> repository,IsystemLogs syslog,CoreDbContext ctx)
             {
                 _repository = repository;
                 _syslog = syslog;
-                _ctx = new CoreDbContext();
+            _ctx = ctx;
             }
         List<string> logs = new List<string>();
         [HttpGet]

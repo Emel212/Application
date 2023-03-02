@@ -1,4 +1,4 @@
-using DataAccessLayer.Abstract;
+﻿using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using Entities.Models;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Application.Server
 {
@@ -26,21 +27,30 @@ namespace Application.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-          
-
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddControllers();
-            services.AddSingleton<IRepository<Record>, Repository<Record>>();
-            services.AddSingleton<IRepository<Values>, Repository<Values>>();
-            services.AddSingleton<IRepository<Column>, Repository<Column>>();
-            services.AddSingleton<IColumns, r_column>();
-            services.AddSingleton<IValues, r_values>();
-            services.AddSingleton<IRepository<SystemLogs>, Repository<SystemLogs>>();
-            services.AddSingleton<IsystemLogs, r_systemLogs>();
-            services.AddSingleton<ITableview, tableview>();
-            services.AddSingleton<IRecord, r_records>();
-            services.AddDbContext<CoreDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddScoped<IRepository<Record>, Repository<Record>>();
+            services.AddScoped<IRepository<Value>, Repository<Value>>();
+            services.AddScoped<IRepository<Entities.Models.TableView>, Repository<Entities.Models.TableView>>();
+            services.AddScoped<IRepository<Column>, Repository<Column>>();
+            services.AddScoped<IColumns, r_column>();
+            services.AddScoped<IValues, r_values>();
+            services.AddScoped<IRepository<SystemLog>, Repository<SystemLog>>();
+            services.AddScoped<IsystemLogs, r_systemLogs>();
+            services.AddScoped<ITableview, DataAccessLayer.Concrete.TableView>();
+            services.AddScoped<IRecord, r_records>();
+            services.AddScoped<CoreDbContext>();
+     
+            //services.AddDbContext<CoreDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+            //services.AddDbContext<CoreDbContext>();
+           services.AddControllers().AddNewtonsoftJson(x =>
+ x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddMvc()
+     .AddNewtonsoftJson(
+          options => {
+              options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+          });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -12,9 +12,9 @@ namespace API.Controllers
     [Route("api/[controller]/[action]")]
     public class ValueController : ControllerBase
     {
-        protected IRepository<Values> _repository;
+        protected IRepository<Value> _repository;
         protected IValues _value;
-        public ValueController(IRepository<Values> repository, IValues values)
+        public ValueController(IRepository<Value> repository, IValues values)
         {
             _repository = repository;
             _value = values;
@@ -34,15 +34,15 @@ namespace API.Controllers
       
 
         [HttpPost]
-        public async Task<IActionResult> AddValue(Values value)
+        public async Task<IActionResult> AddValue([FromBody] Value value)
         {
             var result = await _repository.Insert(value);
             return Ok(result);
         }
-        [HttpPut]
-        public async Task<IActionResult> Update([FromQuery]Values value)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id,Value value)
         {
-            var result = await _repository.Update(value);
+            var result = await _value.UpdateValue(id,value);
             return Ok(result);
         }
         [HttpDelete("{id:int}")]
@@ -51,6 +51,12 @@ namespace API.Controllers
             var result = await _repository.Delete(id);
             return Ok(result);
             
+        }
+        [HttpGet]
+        public async Task<List<Value>> TableView()
+        {
+            var response = await _value.TableView();
+            return response.ToList();
         }
 
     }

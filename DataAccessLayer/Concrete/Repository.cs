@@ -12,12 +12,12 @@ namespace DataAccessLayer.Concrete
     public class Repository<T> : IRepository<T> where T : class
     {
         protected DbSet<T> _dbset;
-         CoreDbContext _ctx;
+         private CoreDbContext _ctx;
 
         
-        public Repository()
+        public Repository(CoreDbContext ctx)
         {
-            _ctx = new CoreDbContext();
+            _ctx = ctx;
             _dbset = _ctx.Set<T>();
         }
         public async Task<bool> Delete(int id)

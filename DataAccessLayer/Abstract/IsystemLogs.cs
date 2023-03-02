@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Abstract
 {
-   public  interface IsystemLogs:IRepository<SystemLogs>
+   public  interface IsystemLogs:IRepository<SystemLog>
     {
 
 

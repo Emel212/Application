@@ -10,11 +10,11 @@ namespace DataAccessLayer.Abstract
 {
      public interface IColumns:IRepository<Column>
      {
-        Task<List<Column>> GetVisibleColumns();
-        Task<bool> ChangeColumnOrder(string direction,int id);
+        Task<List<Entities.Models.TableView>> GetVisibleColumns();
         Task<List<Column>> GetAllColumns();
         Task<bool> UpdateColumns(int id, Column entity);
-        Task<List<Column>> TableView();
+        //Task<List<Value>> TableView();
+        Task<List<Entities.Models.TableView>> TableView();
 
 
     }

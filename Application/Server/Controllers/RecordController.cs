@@ -26,7 +26,7 @@ namespace API.Controllers
             return Ok(list);
         }
         [HttpPost]
-        public async Task<IActionResult> AddRecord([FromQuery] Record record)
+        public async Task<IActionResult> AddRecord( Record record)
         {
             var response = await _repository.Insert(record);
             return Ok(response);

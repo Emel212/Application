@@ -1,20 +1,21 @@
 ﻿using DataAccessLayer.Abstract;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Concrete
 {
-    public class tableview : ITableview
+    public class TableView : ITableview
     {
-        CoreDbContext _ctx;
-        public tableview()
+        private CoreDbContext _ctx;
+
+        public TableView(CoreDbContext ctx)
         {
-            _ctx = new CoreDbContext();
+            _ctx = ctx;
         }
         public Task<bool> Delete(int id)
         {
@@ -36,19 +37,28 @@ namespace DataAccessLayer.Concrete
             throw new NotImplementedException();
         }
 
-        public async Task<List<TableView>> Tableview()
+        public async Task<Dictionary<Column,Value>> Tableview()
         {
             List<Column> p = await _ctx.Columns.ToListAsync();
-            List<Values> i =await _ctx.Values.ToListAsync();
+            List<Value> i = await _ctx.Values.ToListAsync();
             var query = from column in p
                         join value in i on column.Id equals value.ColumnId into Table1
-                        from value in Table1.Where(x => x.Column.IsVisible == true).OrderBy(x => x.Column.Order).ToList()
-                        select new TableView
+                        from value in Table1.Where(x => x.Column.IsVisible == true).Distinct().OrderBy(x => x.Column.Order).ToList()
+                        select new Entities.Models.TableView
                         {
-                            _column = column,
-                            _values = value
+                         
+                            
                         };
-            return  query.ToList();
+            List<Entities.Models.TableView> tableViewList = query.ToList();
+
+            Dictionary<Column, Value> tableDictionary = new Dictionary<Column, Value>();
+
+/*foreach (Entities.Models.TableView tableView in tableViewList)
+            {
+                tableDictionary.Add(tableView._column);
+            }*/
+            return tableDictionary;
+          
         }
 
         public Task<bool> Update(ITableview entity)

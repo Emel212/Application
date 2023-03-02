@@ -9,7 +9,7 @@ namespace DataAccessLayer.Abstract
 {
     public interface ITableview:IRepository<ITableview>
     {
-        Task<List<TableView>> Tableview();
+        Task<Dictionary<Column,Value>> Tableview();
 
 
     }

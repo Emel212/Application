@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace API.Controllers
 {
@@ -21,13 +23,13 @@ namespace API.Controllers
         protected IValues _values;
       
 
-        public ColumnController(IRepository<Column> repository, IColumns columns,ITableview tableview,IValues values)
+        public ColumnController(IRepository<Column> repository, IColumns columns,ITableview tableview,IValues values,CoreDbContext ctx)
         {
 
             _columns = columns;
             _repository = repository;
             _tableView = tableview;
-            _ctx = new CoreDbContext();
+            _ctx = ctx;
             _values = values;
         }
         [HttpGet]
@@ -50,7 +52,7 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpGet]
-        public async Task<List<Column>> GetVisibleColumns()
+        public async Task<List<TableView>> GetVisibleColumns()
         {
             var list = await _columns.GetVisibleColumns();
             return list;
@@ -76,7 +78,7 @@ namespace API.Controllers
             var result = await _columns.UpdateColumns(id,column);
             return Ok(result);
         }
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int}")] 
         public async Task<IActionResult> UpdateRecord(int id, Column column)
         {
             var list = _ctx.Find<Column>(id);
@@ -92,17 +94,10 @@ namespace API.Controllers
             return Ok(result);*/
         }
         [HttpGet]
-        public async Task<IActionResult> TableView()
+        public async Task<List<TableView>> TableView()
         {
-            //var result = await _columns.TableView();
-
-           var result= await _tableView.Tableview();
-
-            return Ok(result);
+            var result= await _columns.TableView();
+            return result;
         }
-       
-
-
-
     }
 }

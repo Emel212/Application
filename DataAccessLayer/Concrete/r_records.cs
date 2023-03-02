@@ -11,9 +11,11 @@ namespace DataAccessLayer.Concrete
     public class r_records : IRecord
     {
         protected IRepository<Record> _repository;
-        public r_records(IRepository<Record> repository)
+        private CoreDbContext _ctx;
+        public r_records(IRepository<Record> repository,CoreDbContext ctx)
         {
             _repository = repository;
+            _ctx = ctx;
         }
         public Task<bool> Delete(int id)
         {

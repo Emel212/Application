@@ -10,12 +10,12 @@ namespace DataAccessLayer.Concrete
 {
     public class r_systemLogs : IsystemLogs
     {
-        protected IRepository<SystemLogs> _repository;
-        CoreDbContext _ctx;
-        public r_systemLogs(IRepository<SystemLogs> repository)
+        protected IRepository<SystemLog> _repository;
+        private CoreDbContext _ctx;
+        public r_systemLogs(IRepository<SystemLog> repository,CoreDbContext ctx)
         {
             _repository = repository;
-            _ctx = new CoreDbContext();
+            _ctx = ctx;
         }
 
         public Task<bool> Delete(int id)
@@ -23,22 +23,22 @@ namespace DataAccessLayer.Concrete
             throw new NotImplementedException();
         }
 
-        public async Task<List<SystemLogs>> GetAll()
+        public async Task<List<SystemLog>> GetAll()
         {
            return await  _repository.GetAll();
         }
 
-        public Task<SystemLogs> GetById(int id)
+        public Task<SystemLog> GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Insert(SystemLogs entity)
+        public Task<bool> Insert(SystemLog entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Update(SystemLogs entity)
+        public Task<bool> Update(SystemLog entity)
         {
             throw new NotImplementedException();
         }
