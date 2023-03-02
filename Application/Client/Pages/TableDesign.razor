@@ -282,6 +282,7 @@
                 var response = await Http.PostAsJsonAsync<Value>("/api/Value/AddValue", Values);
                 response.StatusCode.ToString();
             }
+                 await OnInitializedAsync();
 
         }
         await InvokeAsync(StateHasChanged);  
