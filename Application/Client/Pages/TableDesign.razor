@@ -248,7 +248,7 @@
         Logs = await Http.GetFromJsonAsync<List<string>>("api/SystemLog/GetAllLogs");
         tableview = await Http.GetFromJsonAsync<List<TableView>>("api/Column/TableView");
         int takelast = tableview.Select(x => x._values.ColumnId).First();
-        number_of_vertical_records = tableview.Where(x => x._values.ColumnId == takelast).Select(x=>x._values.RecordId.ToString()).ToList();//column silinip de silinen columna ait valuelar kalırsa sıkıntı çıkabilir
+        number_of_vertical_records = tableview.Where(x => x._values.ColumnId == takelast).Select(x=>x._values.RecordId.ToString()).ToList();
         _updateClicked = false;
        
     }
