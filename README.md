@@ -13,7 +13,7 @@ built with blazor(WebAssembly ASP.Net Core(5.0) hosted)
 #### 3) make sure that application.server.exe is running in the background while you are running the application. you can find exe file under ..\Application\Server\bin\Debug\net5.0\application.server directory.
 
 ##### note: if you dont want to use application.server.exe you must start the project as multiple startup projects. 
-for this; rigth click project solution->properties->Multiple startup projects->select start option for application.client and application.server. in this case dont forget to change the port number(Baseurl) in Application.Client/program.cs to the application.server's port number
+for this; right click project solution->properties->Multiple startup projects->select start option for application.client and application.server. in this case dont forget to change the port number(Baseurl) in Application.Client/program.cs to the application.server's port number
 
 ###
 ![grab-landing-page](https://github.com/Emel212/Application/blob/master/Screenshots/arrange-cols.gif)
