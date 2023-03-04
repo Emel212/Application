@@ -1,6 +1,7 @@
 ## Description
 
-#### This is a dynamic table application that allows users to sort/create rows of data and columns with re-ordering functionality.
+#### A dynamic table application that allows users to create rows and columns of data using sorting/creation and re-ordering functions
+
 
 built with blazor(WebAssembly ASP.Net Core(5.0) hosted)
 
