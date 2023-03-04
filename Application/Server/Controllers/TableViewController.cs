@@ -29,13 +29,7 @@ namespace API.Controllers
             var list =await _tbView.Tableview();
             return list;
         }
-        [HttpGet]
-        public string returnsmt()
-        {
-            string a = "lldfkldf";
-            return a;
-        }
-
+      
 
 
 

@@ -147,7 +147,9 @@ using Entities.Models;
     protected async void New()
     {
         await OnInitializedAsync();
-        await InvokeAsync(StateHasChanged);  
+        await InvokeAsync(StateHasChanged);
+        _updateClicked = false;
+        inputValues.Clear();
     }
 
     protected void SaveAll(int value)
@@ -164,7 +166,6 @@ using Entities.Models;
                 var _id = tableview.Where(x => x._values.ColumnId == colId && x._values.RecordId == recordID).First()._values.Id;
                 val.Id = _id;
             }
-            else
             inputValues.Add(val);
         }
 
@@ -178,8 +179,9 @@ using Entities.Models;
         Logs = await Http.GetFromJsonAsync<List<string>>("api/SystemLog/GetAllLogs");
         tableview = await Http.GetFromJsonAsync<List<TableView>>("api/Column/TableView");
         int takelast = tableview.Select(x => x._values.ColumnId).First();
-        number_of_vertical_records = tableview.Where(x => x._values.ColumnId == takelast).Select(x=>x._values.RecordId.ToString()).ToList();//column silinip de silinen columna ait valuelar kalırsa sıkıntı çıkabilir
+        number_of_vertical_records = tableview.Where(x => x._values.ColumnId == takelast).Select(x=>x._values.RecordId.ToString()).ToList();
         _updateClicked = false;
+        inputValues.Clear();
        
     }
 
@@ -200,7 +202,7 @@ using Entities.Models;
 #line hidden
 #nullable disable
 #nullable restore
-#line 267 "C:\Users\Emel\Desktop\Application\Application\Client\Pages\TableDesign.razor"
+#line 269 "C:\Users\Emel\Desktop\Application\Application\Client\Pages\TableDesign.razor"
              for (int i = 0; i <inputValues.Count ; i++)
             {
                 int inx = i;
@@ -213,7 +215,7 @@ using Entities.Models;
 #line hidden
 #nullable disable
 #nullable restore
-#line 273 "C:\Users\Emel\Desktop\Application\Application\Client\Pages\TableDesign.razor"
+#line 275 "C:\Users\Emel\Desktop\Application\Application\Client\Pages\TableDesign.razor"
              
             await OnInitializedAsync();
         }
@@ -226,9 +228,11 @@ using Entities.Models;
                 var response = await Http.PostAsJsonAsync<Value>("/api/Value/AddValue", Values);
                 response.StatusCode.ToString();
             }
+            await OnInitializedAsync();
 
         }
-        await InvokeAsync(StateHasChanged);  
+        await InvokeAsync(StateHasChanged);
+        New();
 
     }
 
@@ -253,7 +257,7 @@ using Entities.Models;
     }
 
 
-
+                        
     private async Task DeleteColumn(int Id)
     {
         var response = await Http.DeleteAsync("/api/Column/Delete/" + Id);
@@ -305,12 +309,6 @@ using Entities.Models;
         response.StatusCode.ToString();
         response2.StatusCode.ToString();
 
-        await OnInitializedAsync();
-    }
-
-    private async Task AddRecord()
-    {
-        var response = await Http.PostAsJsonAsync<Value>("/api/Column/AddValue", val);
         await OnInitializedAsync();
     }
 

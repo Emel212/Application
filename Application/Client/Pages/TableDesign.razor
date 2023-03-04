@@ -217,7 +217,9 @@
     protected async void New()
     {
         await OnInitializedAsync();
-        await InvokeAsync(StateHasChanged);  
+        await InvokeAsync(StateHasChanged);
+        _updateClicked = false;
+        inputValues.Clear();
     }
 
     protected void SaveAll(int value)
@@ -234,7 +236,6 @@
                 var _id = tableview.Where(x => x._values.ColumnId == colId && x._values.RecordId == recordID).First()._values.Id;
                 val.Id = _id;
             }
-            else
             inputValues.Add(val);
         }
 
@@ -248,8 +249,9 @@
         Logs = await Http.GetFromJsonAsync<List<string>>("api/SystemLog/GetAllLogs");
         tableview = await Http.GetFromJsonAsync<List<TableView>>("api/Column/TableView");
         int takelast = tableview.Select(x => x._values.ColumnId).First();
-        number_of_vertical_records = tableview.Where(x => x._values.ColumnId == takelast).Select(x=>x._values.RecordId.ToString()).ToList();//column silinip de silinen columna ait valuelar kalırsa sıkıntı çıkabilir
+        number_of_vertical_records = tableview.Where(x => x._values.ColumnId == takelast).Select(x=>x._values.RecordId.ToString()).ToList();
         _updateClicked = false;
+        inputValues.Clear();
        
     }
 
@@ -282,9 +284,11 @@
                 var response = await Http.PostAsJsonAsync<Value>("/api/Value/AddValue", Values);
                 response.StatusCode.ToString();
             }
+            await OnInitializedAsync();
 
         }
-        await InvokeAsync(StateHasChanged);  
+        await InvokeAsync(StateHasChanged);
+        New();
 
     }
 
@@ -309,7 +313,7 @@
     }
 
 
-
+                        
     private async Task DeleteColumn(int Id)
     {
         var response = await Http.DeleteAsync("/api/Column/Delete/" + Id);
@@ -361,12 +365,6 @@
         response.StatusCode.ToString();
         response2.StatusCode.ToString();
 
-        await OnInitializedAsync();
-    }
-
-    private async Task AddRecord()
-    {
-        var response = await Http.PostAsJsonAsync<Value>("/api/Column/AddValue", val);
         await OnInitializedAsync();
     }
 
